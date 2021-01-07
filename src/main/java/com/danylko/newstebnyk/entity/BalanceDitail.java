@@ -56,4 +56,15 @@ public class BalanceDitail {
     public void setAvBalance(int avBalance) {
         this.avBalance = avBalance;
     }
+
+    @Override
+    public String toString() {
+        return "BalanceDitail{" +
+                "id='" + id + '\'' +
+                ", signature='" + signature + '\'' +
+                ", cardNumber='" + cardNumber + '\'' +
+                ", currency='" + currency + '\'' +
+                ", avBalance=" + avBalance +
+                '}';
+    }
 }

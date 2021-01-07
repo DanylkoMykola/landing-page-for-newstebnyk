@@ -17,14 +17,7 @@ import java.net.URL;
 
 public class BalanceDitailServiceImpl implements BalanceDitailService {
 
-    private final StorageProperties storageProperties;
-
     Logger logger = LoggerFactory.getLogger(BalanceDitailServiceImpl.class);
-
-    public BalanceDitailServiceImpl(StorageProperties storageProperties) {
-        this.storageProperties = storageProperties;
-    }
-
 
     @Override
     public BalanceDitail requestBalanceDitail(String uri, String xmlLocation) {
@@ -35,7 +28,7 @@ public class BalanceDitailServiceImpl implements BalanceDitailService {
             connection.setDoOutput(true);
             connection.setInstanceFollowRedirects(false);
             connection.setRequestMethod("POST");
-            connection.setRequestProperty("Content-Type", storageProperties.getXmlLocation());
+            connection.setRequestProperty("Content-Type", xmlLocation);
             InputStream is = connection.getInputStream();
             balanceDitail = unmarhal(is);
             is.close();

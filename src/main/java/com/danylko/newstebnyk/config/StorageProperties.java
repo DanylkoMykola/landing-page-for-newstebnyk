@@ -9,6 +9,16 @@ public class StorageProperties {
 
     private String xmlLocation;
 
+    public String getUriBalanceRequest() {
+        return uriBalanceRequest;
+    }
+
+    public void setUriBalanceRequest(String uriBalanceRequest) {
+        this.uriBalanceRequest = uriBalanceRequest;
+    }
+
+    private String uriBalanceRequest;
+
     public String getXmlLocation() {
         return xmlLocation;
     }
