@@ -3,9 +3,9 @@ package com.danylko.newstebnyk.entity;
 public class BalanceDitail {
 
     private String currency;
-    private int avBalance;
+    private double avBalance;
 
-    public BalanceDitail(String currency, int avBalance) {
+    public BalanceDitail(String currency, double avBalance) {
         this.currency = currency;
         this.avBalance = avBalance;
     }
@@ -18,7 +18,7 @@ public class BalanceDitail {
         this.currency = currency;
     }
 
-    public int getAvBalance() {
+    public double getAvBalance() {
         return avBalance;
     }
 

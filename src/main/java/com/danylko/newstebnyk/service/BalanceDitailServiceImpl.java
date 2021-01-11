@@ -2,16 +2,15 @@ package com.danylko.newstebnyk.service;
 
 import com.danylko.newstebnyk.config.PersonInfoProperties;
 import com.danylko.newstebnyk.entity.BalanceDitail;
+
+import com.danylko.newstebnyk.parserrxml.ParserXml;
 import com.danylko.newstebnyk.util.SignatureGenerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import javax.xml.bind.JAXB;
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import java.io.FileReader;
+import org.xml.sax.SAXException;
+import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -25,6 +24,9 @@ public class BalanceDitailServiceImpl implements BalanceDitailService {
 
     @Autowired
     PersonInfoProperties personInfoProperties;
+
+    @Autowired
+    ParserXml parserXml;
 
     private static String signature;
 
@@ -63,11 +65,9 @@ public class BalanceDitailServiceImpl implements BalanceDitailService {
             connection.setDoOutput(true);
             connection.setRequestMethod("POST");
             connection.setRequestProperty("Content-Type", "application/xml");
-            logger.info("-------------send xml started------------");
-
             sendXml(connection, xml);
-            logger.info("-------------send xml finished------------");
-            balanceDitail = unmarhal(connection);
+            balanceDitail = parserXml.parse(connection);
+            logger.info("-------------"+ balanceDitail.toString() + "------------------");
             connection.getResponseCode();
             connection.disconnect();
         } catch(Exception e) {
@@ -76,7 +76,7 @@ public class BalanceDitailServiceImpl implements BalanceDitailService {
         return balanceDitail;
     }
 
-    private BalanceDitail unmarhal(HttpURLConnection connection) throws JAXBException, IOException {
+    private BalanceDitail parseXml(HttpURLConnection connection) throws IOException, ParserConfigurationException, SAXException {
         InputStream is = connection.getInputStream();
         byte[] res = new byte[2048];
         int i = 0;
@@ -85,10 +85,8 @@ public class BalanceDitailServiceImpl implements BalanceDitailService {
             response.append(new String(res, 0, i));
         }
         logger.info("-------------Response=" + response.toString() +"------------");
-        JAXBContext jaxbContext = JAXBContext.newInstance(BalanceDitail.class);
         is.close();
-        BalanceDitail balanceDitail = (BalanceDitail) jaxbContext.createUnmarshaller().unmarshal(new FileReader("C:\\Users\\Mykola\\Development\\newstebnyk\\src\\main\\resources\\balance-ditail.xml"));
-        return  balanceDitail;
+        return  null;
     }
     private void sendXml(HttpURLConnection connection, String xmlLocation) throws IOException {
         OutputStream outputStream = connection.getOutputStream();
