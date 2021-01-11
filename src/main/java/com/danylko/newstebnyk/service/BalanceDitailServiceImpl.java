@@ -64,6 +64,7 @@ public class BalanceDitailServiceImpl implements BalanceDitailService {
             connection.setRequestMethod("POST");
             connection.setRequestProperty("Content-Type", "application/xml");
             logger.info("-------------send xml started------------");
+
             sendXml(connection, xml);
             logger.info("-------------send xml finished------------");
             balanceDitail = unmarhal(connection);
