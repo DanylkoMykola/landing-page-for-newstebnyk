@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 
 import java.net.URI;
 
-@Service
+
 public interface BalanceDitailService {
-    BalanceDitail requestBalanceDitail(String uri, String xmlLocation);
+    BalanceDitail getBalanceDitail();
 }

@@ -4,15 +4,15 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.util.Date;
 
-@XmlRootElement(name="BalanceDetail")
+@XmlRootElement(name="cardbalance")
 public class BalanceDitail {
 
-    private String id;
+ private String id;
     private String signature;
     private String cardNumber;
     private String currency;
-    private int avBalance;
 
+    private int avBalance;
     public String getId() {
         return id;
     }
@@ -48,6 +48,7 @@ public class BalanceDitail {
         this.currency = currency;
     }
 
+
     public int getAvBalance() {
         return avBalance;
     }
@@ -57,7 +58,7 @@ public class BalanceDitail {
         this.avBalance = avBalance;
     }
 
-    @Override
+ @Override
     public String toString() {
         return "BalanceDitail{" +
                 "id='" + id + '\'' +
@@ -67,4 +68,5 @@ public class BalanceDitail {
                 ", avBalance=" + avBalance +
                 '}';
     }
+
 }
