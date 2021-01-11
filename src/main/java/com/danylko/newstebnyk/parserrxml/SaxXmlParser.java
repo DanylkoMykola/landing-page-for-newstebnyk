@@ -32,7 +32,6 @@ public class SaxXmlParser implements ParserXml {
         return balanceDitail;
     }
 
-
     class SaxXmlHandler extends DefaultHandler {
 
         private String balance, currency, lastElementName;

@@ -7,34 +7,8 @@
 <body>
 <div>
     <p>Кількість грошей:</p>
-    <p id="demo">text</p>
-    <button type="button" onclick="Privat24Info()">Button</button>
+    <p th:text="${balance.getAvBalance()}"></p>
+    <p th:text="${balance.getCurrency()}"></p>
 </div>
-<script>
-    var xml = '' +
-        '<\?xml version="1.0" encoding="UTF-8"\?>'+
-        '<request version="1.0">'+
-        '<merchant>'+
-        '<id>180423</id>'+
-        '<signature>3115efc6f4543ffd529bbf1b50f4d778ffbd2d3e</signature>'+
-        '</merchant>'+
-        '<data>'+
-        '<oper>cmt</oper>'+
-        '<wait>0</wait>'+
-        '<test>0</test>'+
-        '<payment id="">'+
-        '<prop name="cardnum" value="4149439010692766" />'+
-        '<prop name="country" value="UA" />'+
-        '</payment>'+
-        '</data>'+
-        '</request>';
-    function Privat24Info(){
-        var request = new XMLHttpRequest();
-        request.open("POST", "https://api.privatbank.ua/p24api/balance", false);
-        request.send(xml);
-        alert(request.responseText);
-        document.getElementById("demo").innerHTML = this.responseText
-    }
-</script>
 </body>
 </html>
