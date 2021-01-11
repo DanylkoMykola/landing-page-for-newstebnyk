@@ -1,26 +1,18 @@
 package com.danylko.newstebnyk.util;
 
 import javax.xml.bind.DatatypeConverter;
-import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 public  class SignatureGenerator {
 
-    private SignatureGenerator() {}
-
     public static String getSignature(String password) {
-        try {
-            byte[] bytesOfPassword = password.getBytes("UTF-8");
-            byte[] bytesMD5 = getHashFunc(bytesOfPassword, "MD5");
-            if (bytesMD5 != null) {
-                byte[] bytesSHA1 = getHashFunc(bytesMD5, "SHA-1");
-                return DatatypeConverter.printHexBinary(bytesSHA1);
-            }
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-        return null;
+        byte[] bytesOfPassword = password.getBytes();
+        byte[] bytesMD5 = getHashFunc(bytesOfPassword, "MD5");
+        if (bytesMD5 == null) { return null; }
+        String convert = DatatypeConverter.printHexBinary(bytesMD5).toLowerCase();
+        byte[] bytesSHA1 = getHashFunc(convert.getBytes(), "SHA-1");
+        return DatatypeConverter.printHexBinary(bytesSHA1).toLowerCase();
     }
 
     private static byte[] getHashFunc(byte[] bytes, String algorithm) {

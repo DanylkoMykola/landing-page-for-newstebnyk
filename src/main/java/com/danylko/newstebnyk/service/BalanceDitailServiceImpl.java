@@ -1,8 +1,11 @@
 package com.danylko.newstebnyk.service;
 
+import com.danylko.newstebnyk.config.PersonInfoProperties;
 import com.danylko.newstebnyk.entity.BalanceDitail;
+import com.danylko.newstebnyk.util.SignatureGenerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.xml.bind.JAXB;
@@ -20,26 +23,39 @@ public class BalanceDitailServiceImpl implements BalanceDitailService {
 
     Logger logger = LoggerFactory.getLogger(BalanceDitailServiceImpl.class);
 
+    @Autowired
+    PersonInfoProperties personInfoProperties;
+
+    private static String signature;
+
+    private String getXml() {
+         String dataTag =
+                 "<oper>cmt</oper>\n" +
+                "        <wait>0</wait>\n" +
+                "        <test>0</test>\n" +
+                "        <payment id=\"\">\n" +
+                "            <prop name=\"cardnum\" value=\"" + personInfoProperties.getCardNum() + "\" />\n" +
+                "            <prop name=\"country\" value=\"UA\" />\n" +
+                "        </payment>";
+         if (signature == null) {
+             signature = SignatureGenerator.getSignature(dataTag + personInfoProperties.getMerchantPassword());
+         }
+         String header = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
+                "<request version=\"1.0\">\n" +
+                "    <merchant>\n" +
+                "        <id>" + personInfoProperties.getMerchantId() + "</id>\n" +
+                "        <signature>" + signature + "</signature>\n" +
+                "    </merchant>\n" +
+                "    <data>\n";
+        String footer = "\n    </data>\n" +
+                "</request>";
+        return header + dataTag + footer;
+    }
+
     @Override
     public BalanceDitail getBalanceDitail() {
-        String testStr =
-                "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +
-                "<request version=\"1.0\">" +
-                "<merchant>" +
-                "<id>180423</id>" +
-                "<signature>3115efc6f4543ffd529bbf1b50f4d778ffbd2d3e</signature>" +
-                "</merchant>" +
-                "<data>" +
-                "<oper>cmt</oper>" +
-                "<wait>0</wait>" +
-                "<test>1</test>" +
-                "<payment id=\"\">" +
-                "<prop name=\"cardnum\" value=\"4149439010692766\" />" +
-                "<prop name=\"country\" value=\"UA\" />" +
-                "</payment>" +
-                "</data>" +
-                "</request>";
         BalanceDitail balanceDitail = null;
+        String xml = getXml();
         try {
             URL url = new URL("https://api.privatbank.ua/p24api/balance");
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
@@ -48,7 +64,7 @@ public class BalanceDitailServiceImpl implements BalanceDitailService {
             connection.setRequestMethod("POST");
             connection.setRequestProperty("Content-Type", "application/xml");
             logger.info("-------------send xml started------------");
-            sendXml(connection, testStr);
+            sendXml(connection, xml);
             logger.info("-------------send xml finished------------");
             balanceDitail = unmarhal(connection);
             connection.getResponseCode();

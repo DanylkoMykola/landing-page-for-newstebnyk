@@ -4,7 +4,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-@ConfigurationProperties(prefix = "personInfo")
+@ConfigurationProperties(prefix = "personinfo")
 public class PersonInfoProperties {
 
     private String merchantId;
