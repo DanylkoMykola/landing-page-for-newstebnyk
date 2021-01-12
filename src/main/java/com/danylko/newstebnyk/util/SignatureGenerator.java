@@ -7,19 +7,17 @@ import java.security.NoSuchAlgorithmException;
 public  class SignatureGenerator {
 
     public static String getSignature(String password) {
-        byte[] bytesOfPassword = password.getBytes();
-        byte[] bytesMD5 = getHashFunc(bytesOfPassword, "MD5");
-        if (bytesMD5 == null) { return null; }
-        String convert = DatatypeConverter.printHexBinary(bytesMD5).toLowerCase();
-        byte[] bytesSHA1 = getHashFunc(convert.getBytes(), "SHA-1");
-        return DatatypeConverter.printHexBinary(bytesSHA1).toLowerCase();
+        String strMD5 = getHashFunc(password, "MD5");
+        if (strMD5 == null) { return null; }
+        return getHashFunc(strMD5, "SHA-1");
     }
 
-    private static byte[] getHashFunc(byte[] bytes, String algorithm) {
+    private static String getHashFunc(String password, String algorithm) {
         try {
+            byte[] bytes = password.getBytes();
             MessageDigest md = MessageDigest.getInstance(algorithm);
             md.update(bytes);
-            return md.digest();
+            return DatatypeConverter.printHexBinary(md.digest()).toLowerCase();
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         }

@@ -7,16 +7,10 @@ import com.danylko.newstebnyk.parserrxml.ParserXml;
 import com.danylko.newstebnyk.util.SignatureGenerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.xml.sax.SAXException;
-import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.ProtocolException;
 import java.net.URL;
 
 @Service
@@ -47,6 +41,7 @@ public class BalanceDitailServiceImpl implements BalanceDitailService {
         } catch(IOException e) {
             throw new RuntimeException("Can't request and unmarshal object", e);
         }
+        logger.info(balanceDitail.toString());
         return balanceDitail;
     }
 
